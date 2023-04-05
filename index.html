@@ -1,0 +1,422 @@
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+<script type="module">
+    panViewer('#cat-pikachiu');
+    panViewer('#shiba-haru');
+    function panViewer(modelid) {
+        const modelViewer = document.querySelector(modelid);
+        modelViewer.addEventListener('load', () => {
+            for (const material of modelViewer.model.materials) {
+                // Removes occlusion map from all materials.
+                material.occlusionTexture.setTexture(null);
+            }
+        });
+        //const tapDistance = 2;
+        //let panning = false;
+        //let panX, panY;
+        //let startX, startY;
+        //let lastX, lastY;
+        //let metersPerPixel;
+
+        //const startPan = () => {
+        //  const orbit = modelViewer.getCameraOrbit();
+        //  const {theta, phi, radius} = orbit;
+        //  const psi = theta - modelViewer.turntableRotation;
+        //  metersPerPixel = 0.75 * radius / modelViewer.getBoundingClientRect().height;
+        //  panX = [-Math.cos(psi), 0, Math.sin(psi)];
+        //  panY = [
+        //    -Math.cos(phi) * Math.sin(psi),
+        //    Math.sin(phi),
+        //    -Math.cos(phi) * Math.cos(psi)
+        //  ];
+        //  modelViewer.interactionPrompt = 'none';
+        //};
+
+        //const movePan = (thisX, thisY) => {
+        //  const dx = (thisX - lastX) * metersPerPixel;
+        //  const dy = (thisY - lastY) * metersPerPixel;
+        //  lastX = thisX;
+        //  lastY = thisY;
+
+        //  const target = modelViewer.getCameraTarget();
+        //  target.x += dx * panX[0] + dy * panY[0];
+        //  target.y += dx * panX[1] + dy * panY[1];
+        //  target.z += dx * panX[2] + dy * panY[2];
+        //  modelViewer.cameraTarget = `${target.x}m ${target.y}m ${target.z}m`;
+
+        //  // This pauses turntable rotation
+        //  modelViewer.dispatchEvent(new CustomEvent(
+        //        'camera-change', {detail: {source: 'user-interaction'}}));
+        //};
+
+        //const recenter = (pointer) => {
+        //  panning = false;
+        //  if (Math.abs(pointer.clientX - startX) > tapDistance ||
+        //      Math.abs(pointer.clientY - startY) > tapDistance)
+        //    return;
+        //  const hit = modelViewer.positionAndNormalFromPoint(pointer.clientX, pointer.clientY);
+        //  modelViewer.cameraTarget =
+        //      hit == null ? 'auto auto auto' : hit.position.toString();
+        //};
+
+        //modelViewer.addEventListener('mousedown', (event) => {
+        //  startX = event.clientX;
+        //  startY = event.clientY;
+        //  panning = event.button === 2 || event.ctrlKey || event.metaKey ||
+        //      event.shiftKey;
+        //  if (!panning)
+        //    return;
+
+        //  lastX = startX;
+        //  lastY = startY;
+        //  startPan();
+        //  event.stopPropagation();
+        //}, true);
+
+        //modelViewer.addEventListener('touchstart', (event) => {
+        //  const {targetTouches, touches} = event;
+        //  startX = targetTouches[0].clientX;
+        //  startY = targetTouches[0].clientY;
+        //  panning = targetTouches.length === 2 && targetTouches.length === touches.length;
+        //  if (!panning)
+        //    return;
+
+        //  lastX = 0.5 * (targetTouches[0].clientX + targetTouches[1].clientX);
+        //  lastY = 0.5 * (targetTouches[0].clientY + targetTouches[1].clientY);
+        //  startPan();
+        //}, true);
+
+        //self.addEventListener('mousemove', (event) => {
+        //  if (!panning)
+        //    return;
+
+        //  movePan(event.clientX, event.clientY);
+        //  event.stopPropagation();
+        //}, true);
+
+        //modelViewer.addEventListener('touchmove', (event) => {
+        //  if (!panning || event.targetTouches.length !== 2)
+        //    return;
+
+        //  const {targetTouches} = event;
+        //  const thisX = 0.5 * (targetTouches[0].clientX + targetTouches[1].clientX);
+        //  const thisY = 0.5 * (targetTouches[0].clientY + targetTouches[1].clientY);
+        //  movePan(thisX, thisY);
+        //}, true);
+
+        //self.addEventListener('mouseup', (event) => {
+        //  recenter(event);
+        //}, true);
+        //
+        //modelViewer.addEventListener('touchend', (event) => {
+        //  if (event.targetTouches.length === 0) {
+        //    recenter(event.changedTouches[0]);
+
+        //    if (event.cancelable) {
+        //      event.preventDefault();
+        //    }
+        //  }
+        //}, true);
+
+        // change color
+        const subid = '#color-controls-' + modelid.split("#")[1];
+        console.log('Changing color to: ', subid);
+        document.querySelector(subid).addEventListener('click', (event) => {
+            const colorString = event.target.dataset.color;
+            if (!colorString) {
+                return;
+            }
+            const modelSrc = modelViewer.getAttribute('src');
+            //debugger;
+            if (colorString == "0") {
+                const submodelSrc = modelSrc.split(".glb")[0];
+                modelViewer.setAttribute('src', submodelSrc + '-gray.glb');
+                event.target.dataset.color = "1";
+            } else if (colorString == "1") {
+                const submodelSrc = modelSrc.split("-gray.glb")[0];
+                modelViewer.setAttribute('src', submodelSrc + '.glb');
+                event.target.dataset.color = "0";
+            }
+        });
+    }
+</script>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="robots" content="noindex">
+    <link rel="StyleSheet" href="./files/style.css" type="text/css" media="all">
+
+    <title>SLoMo: A General System for Legged Robot Motion Imitation from Casual Videos
+    </title>
+
+    <style type="text/css">
+        body {
+            font-family: Times;
+            background-color: #f2f2f2;
+            font-size: 15px;
+        }
+
+        .content {
+            width: 800px;
+            padding: 25px 25px;
+            margin: 25px auto;
+            background-color: #fff;
+            border-radius: 20px;
+        }
+
+        .description {
+            font-family: "Times";
+            white-space: pre;
+            text-align: left;
+        }
+
+        .content-title {
+            background-color: inherit;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        a,
+        a:visited {
+            text-decoration: none;
+            color: blue;
+        }
+
+        .anchor {
+            color: inherit;
+        }
+
+        #authors {
+            text-align: center;
+        }
+
+        #conference {
+            text-align: center;
+            font-style: italic;
+        }
+
+        #authors a {
+            margin: 0 10px;
+        }
+
+        h1 {
+            text-align: center;
+            font-family: Times;
+            font-size: 35px;
+        }
+
+        h2 {
+            font-family: Times;
+            font-size: 25px;
+            padding: 0;
+            margin: 10px;
+        }
+
+        h3 {
+            font-family: Times;
+            font-size: 20px;
+            padding: 0;
+            margin: 10px;
+        }
+
+        p {
+            font-family: Times;
+            line-height: 130%;
+            margin: 10px;
+        }
+
+        big {
+            font-family: Times;
+            font-size: 20px;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+
+        .samples {
+            float: left;
+            width: 50%;
+            text-align: center;
+        }
+
+        .cond {
+            float: left;
+            margin: 0 40px;
+        }
+
+        .cond-container {
+            width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        #vidalign {
+            display: block;
+            margin: 0px;
+            padding: 0px;
+            position: relative;
+            top: 90px;
+            height: auto;
+            max-width: auto;
+            overflow-y: hidden;
+            overflow-x: auto;
+            word-wrap: normal;
+            white-space: nowrap;
+        }
+
+        /* Add a black background color to the top navigation */
+        .topnav {
+            background-color: rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            /* Position the navbar at the top of the page */
+            width: 100%;
+            /* Full width */
+        }
+
+        /* Style the links inside the navigation bar */
+        .topnav a {
+            float: left;
+            color: #333;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        /* Change the color of links on hover */
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        /* Add a color to the active/current link */
+        .topnav a.active {
+            background-color: #04AA6D;
+            color: white;
+        }
+    </style>
+
+    <style>
+        model-viewer {
+            width: 300px;
+            height: 300px;
+        }
+    </style>
+
+</head>
+
+<!-- <div class="topnav">
+    <a class="active" href="#top">Top</a>
+    <a href="#abs">Paper/Code</a>
+    <a href="#vid">Video</a>
+    <a href="#results">Results</a>
+    <a href="#aba">Ablations</a>
+    <a href="#bib">Bibtex</a>
+</div> -->
+
+<div id="top" class="content content-title" style="text-align: center;">
+    <h1>SLoMo: A General System for Legged Robot Motion Imitation from Casual Videos
+    </h1>
+    <big style="color:grey;"> RSS 2023 - Submission #200
+    </big>
+</div>
+
+
+
+<div class="content">
+    <figure style="font-family: Times; font-weight: normal; margin: 0px; padding: 0px; border: 0px; text-align: left">
+
+        <p style="text-align:center;">
+            <img src="./vids/teaser.jpg" width="750">
+        </p>
+        <br>
+        <figcaption> XXX
+    </figure>
+    <br>
+    <figure style="font-family: Times; font-weight: normal; margin: 0px; padding: 0px; border: 0px; text-align: left">
+        <p style="text-align:center;">
+            <img src="./vids/teaser-small.gif" width="750">
+        <p>
+        <figcaption> XXX
+</div>
+
+<div id="abs" class="content">
+    <h2>Abstract</h2>
+    <p>
+        We present SLoMo: a first-of-its-kind framework for transferring skilled motions from casually captured
+        video footage of humans and animals to legged robots.
+        SLoMo works in three stages: 1) synthesize a physically plausible reconstructed key-point trajectory from
+        monocular
+        videos; 2) optimize a dynamically feasible reference trajectory for the robot offline that includes body and
+        foot
+        motion, as well as contact sequences that closely tracks the key points; 3) track the reference trajectory
+        online using
+        a general-purpose model-predictive controller on robot hardware.
+        Traditional motion imitation for legged motor skills often requires expert animators, collaborative
+        demonstrations,
+        and/or expensive motion capture equipment, all of which limits scalability. Instead, SLoMo only relies on
+        easy-to-obtain
+        monocular video footage, readily available in online repositories such as YouTube.
+        It converts videos into motion primitives that can be executed reliably by real-world robots.
+        We demonstrate our approach by transferring the motions of cats, dogs, and humans to example robots including a
+        quadruped (on hardware) and a humanoid (in simulation).
+        To the best knowledge of the authors, this is the first attempt at a general-purpose motion transfer framework
+        that
+        imitates animal and human motions on legged robots directly from casual videos without artificial markers or
+        labels.
+    </p>
+</div>
+
+<div id="vid" class="content">
+    <div style="float: right; width:70px; margin-top: 0px; margin-bottom: 25px">
+    </div>
+    <h2>Video
+    </h2>
+    <!--<video controls width="810" height="520">
+          <source  src="./vids/video.mp4" type="video/mp4">
+         </video>-->
+</div>
+
+
+<div class="content">
+    <div style="float: right; width:70px; margin-top: 0px; margin-bottom: 25px">
+    </div>
+    <h2>Motion retargeting </h2>
+    <br>
+    <center>
+        <table align=center width=810px>
+            <tr>
+                <td width=250px>
+                    <div>
+                        <!-- <video playsinline controls autoplay muted width="100%">
+                            <source src="./vids/pikachiu-haru.mp4" type="video/mp4">
+                        </video> -->
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <table align=center width=810px>
+            <tr>
+                <td>
+                </td>
+            </tr>
+        </table>
+    </center>
+</div>
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>
