@@ -422,11 +422,213 @@
 <div class="content">
     <div style="float: right; width:70px; margin-top: 0px; margin-bottom: 25px">
     </div>
-    <h2>Sub-System Component Evaluation </h2>
+    <h2>3D Reconstruction Evaluation </h2>
     <p>We have extensively evaluated the three components individually before putting them together.
         The results were submitted to different conferences for review, some of which are not double blinded.
         So we could only show the results of the evaluation of the major component - 3D reconstruction.
         It's improvement over existing methods is highlighted.
+    </p>
+
+    <h3>Improve Scale and Foot Contact Estimation</h3>
+    <table align=center width=100%>
+        <tr>
+            <td width="24%">
+                <video playsinline controls autoplay muted width="100%">
+                    <source src="./vids/pr/cat-pikachiu-{0}-vid.mp4" type="video/mp4">
+                </video>
+                <center>
+                    <figcaption>Reference Video</figcaption>
+                </center>
+            </td>
+            <td width="25%">
+                <video playsinline controls autoplay muted width="100%">
+                    <source src="./materials/meshes/cat-pikachiu00-banmo-scale05.mp4" type="video/mp4">
+                </video>
+                <center>
+                    <figcaption>BANMo</figcaption>
+                </center>
+            </td>
+            <td width="25%">
+                <video playsinline controls autoplay muted width="100%">
+                    <source src="./materials/meshes/cat-pikachiu00-banmo-contact.mp4" type="video/mp4">
+                </video>
+                <center>
+                    <figcaption>BANMo+contact prior</figcaption>
+                </center>
+            </td>
+            <td width="25%">
+                <video playsinline controls autoplay muted width="100%">
+                    <source src="./materials/meshes/cat-pikachiu00-ppr.mp4" type="video/mp4">
+                </video>
+                <center>
+                    <figcaption>Ours</figcaption>
+                </center>
+            </td>
+        </tr>
+    </table>
+    <p>
+        Existing video reconstruction methods such as BANMo lack physical accuracy. To augment BANMo results, we apply a
+        simple contact prior (following NeuMan) to find an optimal
+        relative scale between the cat and the background: <i>the feet</i> should not penerate the ground,
+        and should touch the ground in <i>at least one frame</i>.
+        Although contact prior finds a rough scale that makes the feet
+        touch the ground for some frames (green), the cat's body still appears
+        floating with a <i>slanted</i> pose at many other frames (red).
+
+        Because our method jointly solves the scale and pose under physics constraints,
+        it finds a configuration where the contact feet touch the ground.
+    </p>
+
+    <h3>Body Pose Estimation Comparison</h3>
+    <table align=center width=100%>
+        <tr>
+            <td width=19%">
+                <video playsinline controls autoplay muted width="100%">
+                    <source src="./vids/pr/ama-t-{4}-vid.mp4" type="video/mp4">
+                </video>
+                <center>
+                    <figcaption>Referen Video (Samba)</figcaption>
+                </center>
+            </td>
+            <td width="20%">
+                <video playsinline controls autoplay muted width="100%">
+                    <source src="./materials/meshes/T_samba1-humor3.mp4" type="video/mp4">
+                </video>
+                <center>
+                    <figcaption>HuMoR</figcaption>
+                </center>
+            </td>
+            <td width="20%">
+                <video playsinline controls autoplay muted width="100%">
+                    <source src="./materials/meshes/T_samba1-banmo3.mp4" type="video/mp4">
+                </video>
+                <center>
+                    <figcaption>BANMo</figcaption>
+                </center>
+            </td>
+            <td width="20%">
+                <video playsinline controls autoplay muted width="100%">
+                    <source src="./materials/meshes/T_samba1-ppr3.mp4" type="video/mp4">
+                </video>
+                <center>
+                    <figcaption>Ours</figcaption>
+                </center>
+            </td>
+            <td width="20%">
+                <video playsinline controls autoplay muted width="100%">
+                    <source src="./materials/meshes/T_samba1-gt3.mp4" type="video/mp4">
+                </video>
+                <center>
+                    <figcaption>Ground-truth</figcaption>
+                </center>
+            </td>
+        </tr>
+    </table>
+
+    <table align=center width=100%>
+        <tr>
+            <td width=19%">
+                <video playsinline controls autoplay muted width="100%">
+                    <source src="./vids/pr/ama-d-{0}-vid-trm.mp4" type="video/mp4">
+                </video>
+                <center>
+                    <figcaption>Reference Video (Bouncing)</figcaption>
+                </center>
+            </td>
+            <td width="20%">
+                <video playsinline controls autoplay muted width="100%">
+                    <source src="./materials/meshes/D_bouncing1-humor.mp4" type="video/mp4">
+                </video>
+                <center>
+                    <figcaption>HuMoR</figcaption>
+                </center>
+            </td>
+            <td width="20%">
+                <video playsinline controls autoplay muted width="100%">
+                    <source src="./materials/meshes/D_bouncing1-banmo.mp4" type="video/mp4">
+                </video>
+                <center>
+                    <figcaption>BANMo</figcaption>
+                </center>
+            </td>
+            <td width="20%">
+                <video playsinline controls autoplay muted width="100%">
+                    <source src="./materials/meshes/D_bouncing1-ppr.mp4" type="video/mp4">
+                </video>
+                <center>
+                    <figcaption>Ours</figcaption>
+                </center>
+            </td>
+            <td width="20%">
+                <video playsinline controls autoplay muted width="100%">
+                    <source src="./materials/meshes/D_bouncing1-gt.mp4" type="video/mp4">
+                </video>
+                <center>
+                    <figcaption>Ground-truth</figcaption>
+                </center>
+            </td>
+        </tr>
+    </table>
+    <p>
+        We compare our reconstruction with state-of-the-art methods for human motion reconstruction.
+        HuMor accurately reconstructs the body pose of the samba sequence, with feet touching the ground.
+        However, its fails to reconstrcut the foot contact for the bouncing sequence.
+
+        For both sequences, BANMo reconstructs slanted body poses and inaccurate foot contact.
+
+        With the help of differentiable physics simulation, our method reconstructs upright body poses and accurate foot
+        contact.
+
+    </p>
+    <br>
+    <h3>Key-point Trajectory Evaluation</h3>
+    <table align=center width=100%>
+        <tr>
+            <td width="24%">
+                <video playsinline controls autoplay muted width="100%">
+                    <source src="./vids/pr/cat-pikachiu-{0}-vid.mp4" type="video/mp4">
+                </video>
+                <center>
+                    <figcaption>Reference Video</figcaption>
+                </center>
+            </td>
+            <td width="25%">
+                <video playsinline controls autoplay muted width="100%">
+                    <source src="./materials/tracking/track-cat-pikachiu00-banmo.mp4" type="video/mp4">
+                </video>
+                <center>
+                    <figcaption>BANMo</figcaption>
+                </center>
+            </td>
+            <td width="25%">
+                <video playsinline controls autoplay muted width="100%">
+                    <source src="./materials/tracking/track-cat-pikachiu00-ppr.mp4" type="video/mp4">
+                </video>
+                <center>
+                    <figcaption>Ours</figcaption>
+                </center>
+            </td>
+            <td width="25%">
+                <video playsinline controls autoplay muted width="100%">
+                    <source src="./materials/tracking/vid2-simu-cat-pikachiu00-0.mp4" type="video/mp4">
+                </video>
+                <center>
+                    <figcaption>Ours trajectory simulation</figcaption>
+                </center>
+            </td>
+            </td>
+        </tr>
+    </table>
+    <p>
+        We compare BANMo and our method in terms of trajectory quality. BANMo fails to track
+        the left rear foot (colored tracks) due to heavy occlusion during the walking motion. Note
+        the track on the left foot is swapped with the right foot occasionally.
+        Furthermore, it creates an artificial leg to explain the missing tracks on the front leg.
+        <br>
+        In contrast, the key-point trajectory generated by our method tracks the feet well, and does not create an
+        artificial leg.
+        Because the trajectory is physically plausible, the captured motion can be
+        simulated with any physics engines.
     </p>
 </div>
 
